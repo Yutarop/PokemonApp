@@ -1,10 +1,12 @@
 # TangoAPP
-You can make your customized vocab app.  
+You can make your customized vocab app.
 
 Install packages with the comand below.
 ```
 $ node i
 ```
+Add the words and their meanings you would like to memorize to the index.js file.
+
 Then, start the server on your local computer.
 ```
 $ nodemon index.js
