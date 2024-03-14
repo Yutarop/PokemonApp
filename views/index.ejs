@@ -1,0 +1,13 @@
+<%- include("partials/header.ejs") %>
+
+<% if(locals.randomName) { %>
+  <h1><%= randomName %></h1>
+<% }  else { %>
+  <h1>Welcome to 単語帳 😃</h1>
+<% } %>
+
+<form action=<%= action %> method="POST">
+  <button type="submit" value=<%=botton%>><%=botton%></button>
+</form>
+
+<%- include("partials/footer.ejs") %>
