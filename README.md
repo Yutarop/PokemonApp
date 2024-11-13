@@ -13,4 +13,6 @@ $ nodemon index.js
 ```
 Go to http://localhost:3000.
 
-![スクリーンショット 2024-03-14 201012](https://github.com/Yutarop/TangoApp/assets/120556494/49e9ccf2-cee1-48a9-bbe4-f7883c0e6cc4)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/64441e20-29dd-448c-a571-1b2d60ce9c36" alt="無題の動画 ‐ Clipchampで作成"　width="700" height="500">
+</div>
