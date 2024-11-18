@@ -1,13 +1,24 @@
 <%- include("partials/header.ejs") %>
 
-<% if(locals.randomName) { %>
-  <h1><%= randomName %></h1>
-<% }  else { %>
-  <h1>Welcome to 単語帳 😃</h1>
+<% if(imagePath) { %>
+  <h1>このポケモンの名前は？</h1>
+  <img src="<%= imagePath %>" alt="Pokemon Image" style="max-width: 300px;"/>
+<% } else { %>
+  <img src="/pokemon/6-mega-x.png" alt="Pokemon Image" style="max-width: 300px;"/>
+  <h1>Welcome to the Pokémon Quiz!</h1>
 <% } %>
 
-<form action=<%= action %> method="POST">
-  <button type="submit" value=<%=botton%>><%=botton%></button>
+<form action="<%= action %>" method="POST">
+  <div class="form-container">
+  <% if(action === "/check-answer") { %>
+    <input type="text" name="userAnswer" placeholder="Enter Pokémon Name" required class="input-large"/>
+  <% } %>
+    <button type="submit"><%= button %></button>
+  </div>
 </form>
+
+<% if(resultMessage) { %>
+  <h2><%= resultMessage %></h2>
+<% } %>
 
 <%- include("partials/footer.ejs") %>

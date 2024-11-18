@@ -1,62 +1,98 @@
 import express from "express";
 import bodyParser from "body-parser";
+import { spawn } from "child_process";
 
 const app = express();
 const port = 3000;
-var randomIndex;
-var chosenVocab;
-var chosenVocabAnswer;
+let pokemonData = []; 
+let currentPokemon = {};
 
-app.use(express.static("public"));
-
+app.use(express.static("public")); 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+function loadPokemonData(callback) {
+  const pythonProcess = spawn("python", ["load_pokemon.py"]);
+  let dataString = "";
+
+  pythonProcess.stdout.on("data", (data) => {
+    dataString += data.toString();
+  });
+
+  pythonProcess.stderr.on("data", (data) => {
+    console.error(`Python Error: ${data}`);
+  });
+
+  pythonProcess.on("close", (code) => {
+    if (code === 0) {
+      try {
+        pokemonData = JSON.parse(dataString); 
+        console.log("Pokemon data loaded:", pokemonData.length);
+        callback();
+      } catch (err) {
+        console.error("Error parsing JSON:", err);
+      }
+    } else {
+      console.error(`Python script exited with code ${code}`);
+    }
+  });
+}
+
+loadPokemonData(() => {
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
+});
 
 app.get("/", (req, res) => {
   res.render("index.ejs", {
+    imagePath: null,
+    question: "Click below to start the quiz!",
+    button: "Start Quiz",
     action: "/question",
-    botton: "Click here to Start"
+    resultMessage: null,
+    count: null,
   });
 });
 
 app.post("/question", (req, res) => {
-  randomIndex = Math.floor(Math.random() * myVocab.length);
-  chosenVocab = myVocab[randomIndex];
+  if (pokemonData.length === 0) {
+    return res.send("Pokemon data is not loaded yet.");
+  }
+
+  const randomIndex = Math.floor(Math.random() * 721);
+  console.log("Pokemon Index:", randomIndex);
+  currentPokemon = pokemonData[randomIndex];
+  const imagePath = `/pokemon/${currentPokemon.pokedex_number}.png`;
+
   res.render("index.ejs", {
-    randomName: chosenVocab,
-    botton: "See the answer",
-    action: "/answer"
+    imagePath: imagePath,
+    question: "このポケモンの名前は？",
+    button: "Submit Answer",
+    action: "/check-answer",
+    resultMessage: null,
   });
 });
 
-app.post("/answer", (req, res) => {
-  chosenVocabAnswer = answer[randomIndex];
+app.post("/check-answer", (req, res) => {
+  // English version
+  // const userAnswer = req.body.userAnswer.trim().toLowerCase();
+  // const correctAnswer = currentPokemon.name.toLowerCase();
+  const userAnswer = req.body.userAnswer.trim();
+  const correctAnswer = currentPokemon.Katakana;
+
+  let resultMessage;
+  if (userAnswer === correctAnswer) {
+    resultMessage = "Right!";
+  } else {
+    // resultMessage = `Wrong! The correct answer is ${currentPokemon.name}.`;
+    resultMessage = `Wrong! The correct answer is ${currentPokemon.Katakana}.`;
+  }
+
   res.render("index.ejs", {
-    randomName: chosenVocabAnswer,
-    botton: "Next vocab",
-    action: "/question"
+    imagePath: `/pokemon/${currentPokemon.pokedex_number}.png`,
+    question: "このポケモンの名前は？",
+    button: "Next Question",
+    action: "/question",
+    resultMessage: resultMessage,
   });
 });
-
-
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
-
-// add your vocab list here
-const myVocab = [
-  "jump for joy",
-  "I'm on cloud nine.",
-  "couch potato",
-  "sth is killing me",
-  "Who cut the cheese?",
-  "parole"
-];
-
-const answer = [
-  "めちゃくちゃ喜ぶ",
-  "ちょう嬉しい",
-  "めっちゃだらだらしてる奴",
-  "sthが耐えられない、とても辛い",
-  "誰が屁こいたんや",
-  "仮釈放"
-];
