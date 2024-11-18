@@ -11,4 +11,4 @@ $ git clone -b dev/pokemon https://github.com/Yutarop/PokemonApp.git
 $ npm install
 $ nodemon index.js
 ```
-http://localhost:3000を自身のブラウザで開いてください。
+http://localhost:3000 をブラウザで開いてください。
