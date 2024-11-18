@@ -60,13 +60,13 @@ app.post("/question", (req, res) => {
   }
 
   const randomIndex = Math.floor(Math.random() * 721);
-  console.log("Pokemon Index:", randomIndex);
+  // console.log("Pokemon Index:", randomIndex);
   currentPokemon = pokemonData[randomIndex];
   const imagePath = `/pokemon/${currentPokemon.pokedex_number}.png`;
 
   res.render("index.ejs", {
     imagePath: imagePath,
-    question: "このポケモンの名前は？",
+    question: "Who's that Pokémon?",
     button: "Submit Answer",
     action: "/check-answer",
     resultMessage: null,
@@ -75,22 +75,22 @@ app.post("/question", (req, res) => {
 
 app.post("/check-answer", (req, res) => {
   // English version
-  // const userAnswer = req.body.userAnswer.trim().toLowerCase();
-  // const correctAnswer = currentPokemon.name.toLowerCase();
-  const userAnswer = req.body.userAnswer.trim();
-  const correctAnswer = currentPokemon.Katakana;
+  const userAnswer = req.body.userAnswer.trim().toLowerCase();
+  const correctAnswer = currentPokemon.name.toLowerCase();
+  // const userAnswer = req.body.userAnswer.trim();
+  // const correctAnswer = currentPokemon.Katakana;
 
   let resultMessage;
   if (userAnswer === correctAnswer) {
     resultMessage = "Right!";
   } else {
-    // resultMessage = `Wrong! The correct answer is ${currentPokemon.name}.`;
-    resultMessage = `Wrong! The correct answer is ${currentPokemon.Katakana}.`;
+    resultMessage = `Wrong! The correct answer is ${currentPokemon.name}.`;
+    // resultMessage = `Wrong! The correct answer is ${currentPokemon.Katakana}.`;
   }
 
   res.render("index.ejs", {
     imagePath: `/pokemon/${currentPokemon.pokedex_number}.png`,
-    question: "このポケモンの名前は？",
+    question: "Who's that Pokémon?",
     button: "Next Question",
     action: "/question",
     resultMessage: resultMessage,
