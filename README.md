@@ -7,7 +7,7 @@
 
 ## Setup
 ```
-$ git clone -b dev/pokemon https://github.com/Yutarop/PokemonApp.git
+$ git clone -b dev/pokemon-Japanese https://github.com/Yutarop/PokemonApp.git
 $ npm install
 $ nodemon index.js
 ```
