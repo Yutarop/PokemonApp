@@ -26,6 +26,12 @@ h2 {
   font-size: 3.0rem;
 }
 
+h3 {
+  text-align: left;
+  font-size: 2.5rem;
+  margin: 0;
+}
+
 button {
   appearance: none;
   -webkit-appearance: none;
@@ -54,3 +60,38 @@ footer {
 .form-container {
   margin-top: 50px;
 }
+
+/* .horizontal-container {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+} */
+
+.horizontal-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+  padding: 10px;
+}
+
+#skip-button {
+  appearance: none;
+  background: red;
+  color: white;
+  width: 100px;
+  height: 100px;
+  margin-top: 50px;
+  border-radius: 50%;
+}
+
+/* button {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  font-size: 0.9rem;
+  background: #888;
+  padding: 1rem;
+  color: white;
+  cursor: pointer;
+} */

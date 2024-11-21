@@ -6,6 +6,7 @@ const app = express();
 const port = 3000;
 let pokemonData = []; 
 let currentPokemon = {};
+let totalCorrect = 0;
 
 app.use(express.static("public")); 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -50,7 +51,7 @@ app.get("/", (req, res) => {
     button: "Start Quiz",
     action: "/question",
     resultMessage: null,
-    count: null,
+    totalScore: null,
   });
 });
 
@@ -70,6 +71,7 @@ app.post("/question", (req, res) => {
     button: "Submit Answer",
     action: "/check-answer",
     resultMessage: null,
+    totalScore: totalCorrect,
   });
 });
 
@@ -82,6 +84,7 @@ app.post("/check-answer", (req, res) => {
 
   let resultMessage;
   if (userAnswer === correctAnswer) {
+    totalCorrect++;
     resultMessage = "Right!";
   } else {
     // resultMessage = `Wrong! The correct answer is ${currentPokemon.name}.`;
@@ -94,5 +97,6 @@ app.post("/check-answer", (req, res) => {
     button: "Next Question",
     action: "/question",
     resultMessage: resultMessage,
+    totalScore: totalCorrect,
   });
 });

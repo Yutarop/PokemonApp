@@ -1,5 +1,13 @@
 <%- include("partials/header.ejs") %>
 
+<div class="horizontal-container">
+  <% if(totalScore) { %>
+  <h3>
+      Total Score : <%= totalScore %>
+  </h3>
+  <% } %>
+</div>
+
 <% if(imagePath) { %>
   <h1>このポケモンの名前は？</h1>
   <img src="<%= imagePath %>" alt="Pokemon Image" style="max-width: 300px;"/>
@@ -11,11 +19,17 @@
 <form action="<%= action %>" method="POST">
   <div class="form-container">
   <% if(action === "/check-answer") { %>
-    <input type="text" name="userAnswer" placeholder="Enter Pokémon Name" required class="input-large"/>
+    <input type="text" name="userAnswer" placeholder="Enter Pokémon Name" required class="input-large" autofocus autocomplete="off"/>
   <% } %>
     <button type="submit"><%= button %></button>
   </div>
 </form>
+
+<% if(action === "/check-answer") { %>
+  <form action="/question" method="POST">
+    <button type="submit" id="skip-button">Skip</button>
+  </form>
+<% } %>
 
 <% if(resultMessage) { %>
   <h2><%= resultMessage %></h2>
