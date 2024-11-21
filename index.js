@@ -6,6 +6,8 @@ const app = express();
 const port = 3000;
 let pokemonData = []; 
 let currentPokemon = {};
+let startTime = null;
+let isGameActive = false;
 let totalCorrect = 0;
 
 app.use(express.static("public")); 
@@ -46,22 +48,28 @@ loadPokemonData(() => {
 
 app.get("/", (req, res) => {
   res.render("index.ejs", {
-    imagePath: null,
+    imagePath: "/pokemon/6-mega-x.png",
     question: "Click below to start the quiz!",
     button: "Start Quiz",
-    action: "/question",
+    action: "/start",
     resultMessage: null,
     totalScore: null,
+    isGameOn: false,
+    startTime: null,
   });
 });
 
-app.post("/question", (req, res) => {
+app.post("/start", (req, res) => {
+  totalCorrect = 0; 
+  startTime = Date.now(); 
+  isGameActive = true;
+  // console.log(`ok`);
+
   if (pokemonData.length === 0) {
     return res.send("Pokemon data is not loaded yet.");
   }
 
   const randomIndex = Math.floor(Math.random() * 721);
-  console.log("Pokemon Index:", randomIndex);
   currentPokemon = pokemonData[randomIndex];
   const imagePath = `/pokemon/${currentPokemon.pokedex_number}.png`;
 
@@ -72,13 +80,46 @@ app.post("/question", (req, res) => {
     action: "/check-answer",
     resultMessage: null,
     totalScore: totalCorrect,
+    isGameOn: isGameActive,
+    startTime: startTime,
+  });
+});
+
+app.post("/question", (req, res) => {
+  let time_now = Date.now() - startTime
+  // console.log(`${time_now}`);
+  if (!isGameActive || time_now > 60000) {
+    isGameActive = false;
+    return res.render("index.ejs", {
+      imagePath: null,
+      question: `Time's up! ${totalCorrect}問正解しました. `,
+      button: "Play Again",
+      action: "/start",
+      resultMessage: null,
+      totalScore: totalCorrect,
+      isGameOn: isGameActive,
+      startTime: null,
+    });
+  }
+
+  const randomIndex = Math.floor(Math.random() * 721);
+  // console.log("Pokemon Index:", randomIndex);
+  currentPokemon = pokemonData[randomIndex];
+  const imagePath = `/pokemon/${currentPokemon.pokedex_number}.png`;
+
+  res.render("index.ejs", {
+    imagePath: imagePath,
+    question: "このポケモンの名前は？",
+    button: "Submit Answer",
+    action: "/check-answer",
+    resultMessage: null,
+    totalScore: totalCorrect,
+    isGameOn: isGameActive,
+    startTime: startTime,
   });
 });
 
 app.post("/check-answer", (req, res) => {
-  // English version
-  // const userAnswer = req.body.userAnswer.trim().toLowerCase();
-  // const correctAnswer = currentPokemon.name.toLowerCase();
   const userAnswer = req.body.userAnswer.trim();
   const correctAnswer = currentPokemon.Katakana;
 
@@ -87,7 +128,6 @@ app.post("/check-answer", (req, res) => {
     totalCorrect++;
     resultMessage = "Right!";
   } else {
-    // resultMessage = `Wrong! The correct answer is ${currentPokemon.name}.`;
     resultMessage = `Wrong! The correct answer is ${currentPokemon.Katakana}.`;
   }
 
@@ -98,6 +138,8 @@ app.post("/check-answer", (req, res) => {
     action: "/question",
     resultMessage: resultMessage,
     totalScore: totalCorrect,
+    isGameOn: isGameActive,
+    startTime: startTime,
   });
 });
 

@@ -8,13 +8,22 @@
   <% } %>
 </div>
 
-<% if(imagePath) { %>
-  <h1>このポケモンの名前は？</h1>
-  <img src="<%= imagePath %>" alt="Pokemon Image" style="max-width: 300px;"/>
-<% } else { %>
-  <img src="/pokemon/6-mega-x.png" alt="Pokemon Image" style="max-width: 300px;"/>
-  <h1>Welcome to 小研ポケモン大会!</h1>
+<div id="right-timer">
+<% if (startTime) { %>
+  <p>残り時間 : <span id="timer"></span> 秒</p>
 <% } %>
+</div>
+
+<% if(isGameOn) { %>
+  <h1><%= question%></h1>
+  <img src="<%= imagePath %>" alt="Pokemon Image" style="max-width: 300px;"/>
+<% } else if(imagePath) { %>
+  <img src="<%= imagePath %>" alt="Pokemon Image" style="max-width: 300px;"/>
+  <h1>Welcome to コバ研ポケモン大会!</h1>
+<% } else { %>
+  <h1><%= question%></h1>
+  <%} %>
+
 
 <form action="<%= action %>" method="POST">
   <div class="form-container">
@@ -34,5 +43,4 @@
 <% if(resultMessage) { %>
   <h2><%= resultMessage %></h2>
 <% } %>
-
 <%- include("partials/footer.ejs") %>

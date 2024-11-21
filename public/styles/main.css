@@ -61,12 +61,6 @@ footer {
   margin-top: 50px;
 }
 
-/* .horizontal-container {
-  display: flex;
-  justify-content: space-between;
-  text-align: left;
-} */
-
 .horizontal-container {
   position: absolute;
   top: 0;
@@ -77,7 +71,8 @@ footer {
 
 #skip-button {
   appearance: none;
-  background: red;
+  background: palevioletred;
+  font-size: 16px;
   color: white;
   width: 100px;
   height: 100px;
@@ -85,13 +80,14 @@ footer {
   border-radius: 50%;
 }
 
-/* button {
-  appearance: none;
-  -webkit-appearance: none;
-  border: 0;
-  font-size: 0.9rem;
-  background: #888;
-  padding: 1rem;
-  color: white;
-  cursor: pointer;
-} */
+#right-timer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  padding: 30px;
+}
+
+#right-timer p {
+  font-size: 30px;
+}

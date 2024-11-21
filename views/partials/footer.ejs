@@ -5,6 +5,16 @@
   <% var yearNow = year.getFullYear(); %>
   <p>Copyright © Yutarop <%= yearNow %></p>
 </footer>
-</body>
 
+<script src="scripts/timer.js"></script>
+
+<script>
+  <% if (startTime) { %>
+    const startTime = <%= startTime %>;
+    const duration = 60000;
+    startTimer(startTime, duration, "timer");
+  <% } %>
+</script>
+
+</body>
 </html>
